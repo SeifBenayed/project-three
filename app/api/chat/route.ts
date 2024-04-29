@@ -32,15 +32,19 @@ export async function POST(req: Request) {
 
 
 
-  const TEMPLATE = `You are a very enthusiastic beauty expert representative who loves to help people to choose the best product! Given the following informations from different platform, answer the question for the Product ${product}  using only that information, outputted in markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "Sorry, I don't know how to help with that."
+  const TEMPLATE = `I want you to act as beauty expert representative. Your passion lies in helping people select the best products tailored to their needs. Using the provided information from various platforms, please answer ${query}. If the information is unclear or the answer is not explicitly provided in the documentation, please respond with "Sorry, I don't know how to help with that."
   
   Context sections:
   ${JSON.stringify(vectorSearch)}
 
-  Question: """
-  ${query}
+  Product: """
+  ${product}
   """
+  
+  Answer:
+
   `;
+  console.log(TEMPLATE)
   messages[messages.length -1].content = TEMPLATE;
 
   const { stream, handlers } = LangChainStream();

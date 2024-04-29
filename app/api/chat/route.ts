@@ -41,7 +41,6 @@ export async function POST(req: Request) {
   ${product}
   """
   `;
-
   messages[messages.length -1].content = TEMPLATE;
 
   const { stream, handlers } = LangChainStream();

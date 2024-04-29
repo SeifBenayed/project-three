@@ -28,7 +28,6 @@ export async function POST(req: Request) {
       lambda: 0.1,
     },
   });
-  
   const retrieverOutput = await retriever.getRelevantDocuments(question);
-  return Response.json(retrieverOutput);
+  return  new Response(JSON.stringify(retrieverOutput));
 }

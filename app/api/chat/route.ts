@@ -32,13 +32,13 @@ export async function POST(req: Request) {
 
 
 
-  const TEMPLATE = `You are a very enthusiastic beauty expert representative who loves to help people to choose the best product! Given the following informations from different platform, give the ${query} for the Product using only that information, outputted in markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "Sorry, I don't know how to help with that."
+  const TEMPLATE = `You are a very enthusiastic beauty expert representative who loves to help people to choose the best product! Given the following informations from different platform, answer the question for the Product ${product}  using only that information, outputted in markdown format. If you are unsure and the answer is not explicitly written in the documentation, say "Sorry, I don't know how to help with that."
   
   Context sections:
   ${JSON.stringify(vectorSearch)}
 
-  Product: """
-  ${product}
+  Question: """
+  ${query}
   """
   `;
   messages[messages.length -1].content = TEMPLATE;

@@ -51,7 +51,7 @@ export async function POST(req: Request) {
 
   const llm = new ChatOpenAI({
     modelName: "gpt-3.5-turbo",
-    streaming: true,
+    streaming: false,
   });
 
   llm

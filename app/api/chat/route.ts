@@ -44,7 +44,6 @@ export async function POST(req: Request) {
   Answer:
 
   `;
-  console.log(TEMPLATE)
   messages[messages.length -1].content = TEMPLATE;
 
   const { stream, handlers } = LangChainStream();
@@ -66,7 +65,6 @@ export async function POST(req: Request) {
     )
     .catch(console.error);
   const seif = new StreamingTextResponse(stream)
-  console.log(console.error)
 
   return seif;
 }

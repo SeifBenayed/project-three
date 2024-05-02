@@ -44,13 +44,12 @@ export async function POST(req: Request) {
   Answer:
 
   `;
-  console.log(TEMPLATE)
   messages[messages.length -1].content = TEMPLATE;
 
   const { stream, handlers } = LangChainStream();
 
   const llm = new ChatOpenAI({
-    modelName: "gpt-3.5-turbo",
+    modelName: "gpt-4-turbo",
     streaming: true,
   });
 
@@ -65,8 +64,8 @@ export async function POST(req: Request) {
       [handlers],
     )
     .catch(console.error);
+
   const seif = new StreamingTextResponse(stream)
-  console.log(console.error)
 
   return seif;
 }

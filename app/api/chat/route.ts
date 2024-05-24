@@ -19,18 +19,51 @@ function extractProductAndQuery(input: string): { product: string; query: string
 }
 
 export async function POST(req: Request) {
-  const { messages } = await req.json();
+  let messages;
+  try {
+    const bodyText = await req.text();
+    console.log("Received body text:", bodyText); // Log the raw body text
+    const body = JSON.parse(bodyText);
+    messages = body.messages;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return new Response(JSON.stringify({ error: "Invalid JSON format" }), { status: 400 });
+  }
+
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return new Response(JSON.stringify({ error: "Invalid messages format" }), { status: 400 });
+  }
+
   const currentMessageContent = messages[messages.length - 1].content;
-  const { product, query } = extractProductAndQuery(currentMessageContent);
-  const vectorSearch = await fetch("http://localhost:3000/api/vectorSearch", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: product,
-  }).then((res) => res.json());
+  if (typeof currentMessageContent !== 'string') {
+    return new Response(JSON.stringify({ error: "Invalid message content format" }), { status: 400 });
+  }
 
+  let product, query;
+  try {
+    ({ product, query } = extractProductAndQuery(currentMessageContent));
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), { status: 400 });
+  }
 
+  let vectorSearch;
+  try {
+    const vectorSearchResponse = await fetch("http://localhost:3000/api/vectorSearch", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ product }), // Ensure the body is a valid JSON
+    });
+
+    const vectorSearchText = await vectorSearchResponse.text();
+    console.log("Received vector search response:", vectorSearchText); // Log the raw response text
+
+    vectorSearch = JSON.parse(vectorSearchText); // Attempt to parse the response
+  } catch (error) {
+    console.error("Error fetching vector search or parsing response:", error);
+    return new Response(JSON.stringify({ error: "Failed to fetch or parse vector search" }), { status: 500 });
+  }
 
   const TEMPLATE = `I want you to act as a beauty expert. Your passion lies in helping people check if the products suit their needs. Using the provided product information (product, brand, ingredients, rating, sources, description, how to use) and reviews from various platforms, please respond to the user query: ${query}. If you are not sure about the answer, please respond with "Sorry, I don't know how to help with that."
 
@@ -40,11 +73,10 @@ ${product}
 ${JSON.stringify(vectorSearch)}
 """
 
-  
-  Answer:
+Answer:
 
-  `;
-  messages[messages.length -1].content = TEMPLATE;
+`;
+  messages[messages.length - 1].content = TEMPLATE;
 
   const { stream, handlers } = LangChainStream();
 
@@ -53,18 +85,20 @@ ${JSON.stringify(vectorSearch)}
     streaming: true,
   });
 
-  llm
-    .call(
-      (messages as Message[]).map(m =>
-        m.role == 'user'
-          ? new HumanMessage(m.content)
-          : new AIMessage(m.content),
-      ),
-      {},
-      [handlers],
-    )
-    .catch(console.error);
-
+  try {
+    await llm.call(
+        (messages as Message[]).map(m =>
+            m.role == 'user'
+                ? new HumanMessage(m.content)
+                : new AIMessage(m.content),
+        ),
+        {},
+        [handlers],
+    );
+  } catch (error) {
+    console.error("Error calling language model:", error);
+    return new Response(JSON.stringify({ error: "Failed to call language model" }), { status: 500 });
+  }
 
   return new StreamingTextResponse(stream);
 }

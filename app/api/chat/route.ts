@@ -32,12 +32,12 @@ export async function POST(req: Request) {
 
 
 
-  const TEMPLATE = `I want you to act as beauty expert representative. Your passion lies in helping people select the best products tailored to their needs. Using the provided information from various platforms, please answer ${query}. If the information is unclear or the answer is not explicitly provided in the documentation, please respond with "Sorry, I don't know how to help with that."
+  const TEMPLATE = `I want you to act as beauty expert. Your passion lies in helping people to check if the  products suit  their needs. Using the provided product information( product, brand, ingredients, rating, sources, description, how to use)  and reviews from various platforms, please respond to the user query: ${query}. If the the answer is not explicitly provided in the documentation, please respond with "Sorry, I don't know how to help with that."
   
-  Context sections:
+   reviews sections:
   ${JSON.stringify(vectorSearch)}
 
-  Product: """
+  Product information section: """
   ${product}
   """
   
@@ -65,7 +65,6 @@ export async function POST(req: Request) {
     )
     .catch(console.error);
 
-  const seif = new StreamingTextResponse(stream)
 
-  return seif;
+  return new StreamingTextResponse(stream);
 }

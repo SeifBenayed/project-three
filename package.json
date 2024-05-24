@@ -10,7 +10,7 @@
     "embed": "node createEmbeddings.mjs"
   },
   "dependencies": {
-    "ai": "2.2.14",
+    "ai": "^2.2.14",
     "aws-amplify": "^6.1.4",
     "dotenv": "^16.4.5",
     "langchain": "^0.0.129",

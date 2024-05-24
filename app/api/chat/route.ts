@@ -32,14 +32,14 @@ export async function POST(req: Request) {
 
 
 
-  const TEMPLATE = `I want you to act as beauty expert. Your passion lies in helping people to check if the  products suit  their needs. Using the provided product information( product, brand, ingredients, rating, sources, description, how to use)  and reviews from various platforms, please respond to the user query: ${query}. If the the answer is not explicitly provided in the documentation, please respond with "Sorry, I don't know how to help with that."
-  
-   reviews sections:
-  ${JSON.stringify(vectorSearch)}
+  const TEMPLATE = `I want you to act as a beauty expert. Your passion lies in helping people check if the products suit their needs. Using the provided product information (product, brand, ingredients, rating, sources, description, how to use) and reviews from various platforms, please respond to the user query: ${query}. If you are not sure about the answer, please respond with "Sorry, I don't know how to help with that."
 
-  Product information section: """
-  ${product}
-  """
+product information and reviews sections:
+"""
+${product}
+${JSON.stringify(vectorSearch)}
+"""
+
   
   Answer:
 

@@ -20,9 +20,10 @@ function extractProductAndQuery(input: string): { product: string; query: string
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
+  console.log(messages)
   const currentMessageContent = messages[messages.length - 1].content;
   const { product, query } = extractProductAndQuery(currentMessageContent);
-  const vectorSearch = await fetch("http://localhost:3000/api/vectorSearch", {
+  const vectorSearch = await fetch("https://project-three-q4dq.vercel.app/api/vectorSearch", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

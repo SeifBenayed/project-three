@@ -10,20 +10,18 @@ const client = new MongoClient(process.env.MONGODB_ATLAS_URI || "");
 const dbName = "docs";
 const collectionName = "embeddings";
 const collection = client.db(dbName).collection(collectionName);
-
-const docs_dir = "_assets/fcc_docs";
-const fileNames = await fsp.readdir(docs_dir);
+const docs_dir = "_assets/fcc_docs/products.json";
 console.log(fileNames);
-for (const fileName of fileNames) {
-  const document = await fsp.readFile(`${docs_dir}/${fileName}`, "utf8");
+
+  const document = await fsp.readFile(`${docs_dir}`, "utf8");
   console.log(`Vectorizing ${fileName}`);
-  
+
   const splitter = RecursiveCharacterTextSplitter.fromLanguage("markdown", {
     chunkSize: 500,
     chunkOverlap: 50,
   });
   const output = await splitter.createDocuments([document]);
-  
+
   await MongoDBAtlasVectorSearch.fromDocuments(
     output,
     new OpenAIEmbeddings(),
@@ -34,7 +32,6 @@ for (const fileName of fileNames) {
       embeddingKey: "embedding",
     }
   );
-}
 
 console.log("Done: Closing Connection");
 await client.close();

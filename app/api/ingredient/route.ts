@@ -37,6 +37,10 @@ export async function POST(req: Request) {
             safetyResults.push({
                 ingredient: ingredient,
                 general_safety: result[0].General_Safety,
+                pregnant:result[0].Safety_in_Pregnancy,
+                Acne:result[0].Suitability_for_acne_prone_skin_formulations,
+                comment:result[0].Comment,
+
             });
         } else {
             safetyResults.push({

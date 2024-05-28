@@ -12,9 +12,9 @@ export async function POST(req: Request) {
         throw new Error('Missing ingredientsString in request body');
     }
 
-    const ingredients = body.split(',').map(ingredient => ingredient.trim());
-    // Prepare an array to hold the safety results
-    const safetyResults = [];
+    const ingredients = body.split(',').map((ingredient: string) => ingredient.trim());
+// Prepare an array to hold the safety results
+    const safetyResults = [];    // Prepare an array to hold the safety results
     let ingredient
     // Iterate through each ingredient and use Atlas Search to find its safety status
     for (ingredient of ingredients) {

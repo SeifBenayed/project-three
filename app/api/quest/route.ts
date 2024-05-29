@@ -11,12 +11,8 @@ export async function POST(req: Request) {
 
     const headers = JSON.stringify(req.headers);
     const IP =  JSON.stringify(req.ip);
-
-    const  geo = geoip.lookup(req.ip);
-
-    const agent = req.headers["user-agent"]);
-    const language =  req.headers["accept-language"]);
-    const country = (geo ? geo.country: "Unknown"));
+    const agent = req.headers["user-agent"];
+    const language =  req.headers["accept-language"];
 
     if (!body) {
             throw new Error('Missing body in request body');

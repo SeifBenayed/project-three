@@ -8,11 +8,9 @@ export async function POST(req: Request) {
     const collection_ingredient = client.db(dbName).collection(collectionName);
         // Get the list of ingredients from the request body as a plain text string
     const  body  = await req.text();
-
     if (!body) {
             throw new Error('Missing body in request body');
         }
-
         // Insert the request body into the database
     const result = await collection_ingredient.insertOne({ body, createdAt: new Date() });
 

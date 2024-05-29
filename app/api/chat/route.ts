@@ -33,7 +33,7 @@ export async function POST(req: Request) {
 
 
 
-  const TEMPLATE = `I want you to act as beauty expert representative. Your passion lies in helping people select the best products tailored to their needs. Using the provided information from various platforms, please answer ${query}. If the information is unclear or the answer is not explicitly provided in the documentation, please respond with "Sorry, I don't know how to help with that."
+  const TEMPLATE = `I want you to act as beauty expert representative. Your passion lies in helping people select the best products tailored to their needs. Using the provided information from various platforms, please answer ${query} in few lines ( maximum 5 lines). If the information is unclear or the answer is not explicitly provided in the documentation, please respond with "Sorry, I don't know how to help with that."
   
   Context sections:
   ${JSON.stringify(vectorSearch)}

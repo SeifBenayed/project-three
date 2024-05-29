@@ -9,12 +9,21 @@ export async function POST(req: Request) {
         // Get the list of ingredients from the request body as a plain text string
         const  body  = await req.text();
 
+    const headers = JSON.stringify(req.headers);
+    const IP =  JSON.stringify(req.ip);
+
+    const  geo = geoip.lookup(req.ip);
+
+    const agent = req.headers["user-agent"]);
+    const language =  req.headers["accept-language"]);
+    const country = (geo ? geo.country: "Unknown"));
+
     if (!body) {
             throw new Error('Missing body in request body');
         }
 
         // Insert the request body into the database
-    const result = await collection_ingredient.insertOne({ body, createdAt: new Date() });
+    const result = await collection_ingredient.insertOne({ body, createdAt: new Date(),headers, IP, agent, language, country });
 
         // Return the result of the insertion
     return new Response(JSON.stringify({ insertedId: result.insertedId }), {

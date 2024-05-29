@@ -9,6 +9,7 @@ export async function POST(req: Request) {
     // Get the list of ingredients from the request body as a plain text string
     const { body } = await req.json();
     if (!body) {
+
         throw new Error('Missing ingredientsString in request body');
     }
 

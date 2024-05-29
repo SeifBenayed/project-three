@@ -66,7 +66,6 @@ export async function POST(req: Request) {
       )
       .catch(console.error);
 
-  const seif = new StreamingTextResponse(stream)
 
-  return seif;
+  return new StreamingTextResponse(stream);
 }
